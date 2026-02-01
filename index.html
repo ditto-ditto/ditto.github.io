@@ -61,7 +61,7 @@
 <body>
 
 <div class="card">
-  <h2>⏳ Countdown to Our Meet</h2>
+  <h2>⏳ Countdown</h2>
   <p id="days">Loading…</p>
   <p id="status">// status: excited</p>
 </div>
@@ -82,12 +82,11 @@
     else if (days > 10) statusText = "Excitement rising!";
     else if (days > 5) statusText = "Almost there!";
     else if (days > 0) statusText = "I can't wait!";
-    else statusText = "Today’s the day! ❤️";
+    else statusText = "Today’s the day!";
 
     document.getElementById("status").textContent = "// status: " + statusText;
   }
 
-  
   updateCountdown();
   // Update every hour just in case
   setInterval(updateCountdown, 3600 * 1000);
