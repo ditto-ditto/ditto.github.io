@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Countdown</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      background: radial-gradient(circle at top, #0f172a, #020617);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: monospace;
+      color: #e5e7eb;
+    }
+    .card {
+      padding: 24px;
+      border: 1px solid #38bdf8;
+      border-radius: 12px;
+      text-align: center;
+      animation: float 3s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="card">
+    <h2>⏳ Countdown Initialized</h2>
+    <p id="days">Loading…</p>
+    <p>// status: excited</p>
+  </div>
+
+  <script>
+    const meetDate = new Date("2026-02-22");
+    const today = new Date();
+    const diff = meetDate - today;
+    const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
+    document.getElementById("days").textContent =
+      "Days until we meet: " + days;
+  </script>
+</body>
+</html>
