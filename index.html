@@ -3,108 +3,172 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Countdown</title>
+<title>Doomsday Clock</title>
 
 <style>
   body {
     margin: 0;
     height: 100vh;
+    background:
+      radial-gradient(circle at top, rgba(34,197,94,0.15), #020617 60%),
+      repeating-linear-gradient(
+        to bottom,
+        rgba(255,255,255,0.02),
+        rgba(255,255,255,0.02) 1px,
+        transparent 1px,
+        transparent 3px
+      );
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
-    background: radial-gradient(circle at top, #0f172a, #020617);
-    font-family: monospace;
+    font-family: "Courier New", monospace;
     color: #e5e7eb;
     overflow: hidden;
   }
 
-  .card {
-    padding: 24px 32px;
-    border: 2px solid #38bdf8;
-    border-radius: 16px;
+  .container {
     text-align: center;
-    background: rgba(15,23,42,0.8);
-    box-shadow: 0 0 20px #38bdf8aa;
-    animation: float 3s ease-in-out infinite;
+    padding: 40px 50px;
+    border: 1px solid rgba(34,197,94,0.4);
+    background: rgba(2,6,23,0.85);
+    box-shadow:
+      0 0 30px rgba(34,197,94,0.3),
+      inset 0 0 20px rgba(34,197,94,0.15);
+    animation: float 4s ease-in-out infinite;
   }
 
   @keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
   }
 
-  h2 {
-    font-size: 2em;
-    margin-bottom: 15px;
-  }
-
-  #countdown {
+  h1 {
     font-size: 1.6em;
-    font-weight: bold;
-    color: #facc15;
-    letter-spacing: 1px;
+    letter-spacing: 4px;
+    font-weight: normal;
+    margin-bottom: 25px;
+    color: #bbf7d0;
   }
 
-  .star {
+  .timer {
+    display: flex;
+    gap: 18px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .unit {
+    min-width: 90px;
+  }
+
+  .number {
+    font-size: 2.4em;
+    color: #f8fafc;
+    text-shadow: 0 0 10px rgba(34,197,94,0.6);
+  }
+
+  .label {
+    margin-top: 6px;
+    font-size: 0.7em;
+    letter-spacing: 2px;
+    color: #86efac;
+    opacity: 0.8;
+  }
+
+  .footer {
+    margin-top: 30px;
+    font-size: 0.7em;
+    letter-spacing: 2px;
+    opacity: 0.5;
+  }
+
+  /* Floating particles */
+  .particle {
     position: absolute;
     width: 2px;
     height: 2px;
-    background: #fff;
-    border-radius: 50%;
-    animation: twinkle 3s infinite;
+    background: #bbf7d0;
+    opacity: 0.4;
+    animation: drift 6s linear infinite;
   }
 
-  @keyframes twinkle {
-    0%, 100% { opacity: 0.2; transform: translateY(0); }
-    50% { opacity: 1; transform: translateY(-2px); }
+  @keyframes drift {
+    from { transform: translateY(0); opacity: 0; }
+    to { transform: translateY(-100px); opacity: 0.6; }
   }
 </style>
 </head>
 
 <body>
 
-<div class="card">
-  <h2>Countdown to 22 Feb 2026</h2>
-  <div id="countdown">Loading...</div>
+<div class="container">
+  <h1>DOOMSDAY PROTOCOL</h1>
+
+  <div class="timer">
+    <div class="unit">
+      <div class="number" id="months">00</div>
+      <div class="label">MONTHS</div>
+    </div>
+    <div class="unit">
+      <div class="number" id="days">00</div>
+      <div class="label">DAYS</div>
+    </div>
+    <div class="unit">
+      <div class="number" id="hours">00</div>
+      <div class="label">HOURS</div>
+    </div>
+    <div class="unit">
+      <div class="number" id="minutes">00</div>
+      <div class="label">MINUTES</div>
+    </div>
+    <div class="unit">
+      <div class="number" id="seconds">00</div>
+      <div class="label">SECONDS</div>
+    </div>
+  </div>
+
+  <div class="footer">
+    THIS EVENT IS NOT YET RATED
+  </div>
 </div>
 
 <script>
-  const countdownEl = document.getElementById("countdown");
-  const targetDate = new Date("2026-02-22T00:00:00").getTime();
+  const target = new Date("2026-02-22T00:00:00");
 
   function updateCountdown() {
-    const now = new Date().getTime();
-    const diff = targetDate - now;
+    const now = new Date();
+    let diff = target - now;
 
-    if (diff <= 0) {
-      countdownEl.textContent = "🎉 It's the day!";
-      return;
-    }
+    if (diff <= 0) return;
 
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-    const minutes = Math.floor((diff / (1000 * 60)) % 60);
     const seconds = Math.floor((diff / 1000) % 60);
+    const minutes = Math.floor((diff / (1000 * 60)) % 60);
+    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+    const daysTotal = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const months = Math.floor(daysTotal / 30);
+    const days = daysTotal % 30;
 
-    countdownEl.textContent =
-      `${days}d ${hours}h ${minutes}m ${seconds}s`;
+    document.getElementById("months").textContent = months.toString().padStart(2, "0");
+    document.getElementById("days").textContent = days.toString().padStart(2, "0");
+    document.getElementById("hours").textContent = hours.toString().padStart(2, "0");
+    document.getElementById("minutes").textContent = minutes.toString().padStart(2, "0");
+    document.getElementById("seconds").textContent = seconds.toString().padStart(2, "0");
   }
 
   setInterval(updateCountdown, 1000);
   updateCountdown();
 
-  // Floating stars
-  function createStar() {
-    const star = document.createElement("div");
-    star.className = "star";
-    star.style.top = Math.random() * window.innerHeight + "px";
-    star.style.left = Math.random() * window.innerWidth + "px";
-    document.body.appendChild(star);
-    setTimeout(() => star.remove(), 4000);
+  // Ambient particles
+  function spawnParticle() {
+    const p = document.createElement("div");
+    p.className = "particle";
+    p.style.left = Math.random() * window.innerWidth + "px";
+    p.style.top = window.innerHeight + "px";
+    document.body.appendChild(p);
+    setTimeout(() => p.remove(), 6000);
   }
 
-  setInterval(createStar, 200);
+  setInterval(spawnParticle, 300);
 </script>
 
 </body>
